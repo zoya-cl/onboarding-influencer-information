@@ -444,8 +444,9 @@
 // REPLACE THIS URL with your Google Apps Script Web App URL
 // Steps: Extensions → Apps Script → Deploy → New Deployment → Web App
 // Execute as: Me | Who has access: Anyone → Deploy → Copy URL
-//const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwXTYt7Dda36gJmNwdbBcxNICN_tDBc6KT7ptF-v8Cyt5Mdrz69c5ph1RgGK0LBbqbx/exec';
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwhAl6H7Z8rG8BiNFsmNkqofMHUxr847QH9xhtCq2PTwdp4BoxAC-BQBnFP3hv1FUWQ/exec'
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwhAl6H7Z8rG8BiNFsmNkqofMHUxr847QH9xhtCq2PTwdp4BoxAC-BQBnFP3hv1FUWQ/exec';
+
+
 // ─── Platform toggle ───────────────────────────────────────────
 const selectedPlatforms = new Set();
 
@@ -476,14 +477,13 @@ function renderChannelFields() {
     row.innerHTML = `
       <div class="field">
         <label>${PLATFORM_LABELS[p]} — Handle / Name</label>
-        <input type="text" placeholder="@handle or Channel Name" data-platform="${p}-handle">
+        <input type="text" placeholder="@handle or Channel Name" class="platform-handle" data-platform="${p}">
       </div>
       <div class="field">
         <label>${PLATFORM_LABELS[p]} — Link</label>
-        <input type="url" placeholder="https://" data-platform="${p}-link">
+        <input type="url" placeholder="https://" class="platform-link" data-platform="${p}">
       </div>`;
     wrap.appendChild(row);
-    // attach listeners to new inputs
     row.querySelectorAll('input').forEach(el => el.addEventListener('input', updateProgress));
   });
 }
@@ -570,16 +570,20 @@ function drawConfetti() {
 }
 
 // ─── Toast ─────────────────────────────────────────────────────
-function showToast(msg) {
+function showToast(msg, isError = false) {
   const t = document.getElementById('toast');
   t.textContent = msg;
+  t.style.background = isError ? '#E8502A' : 'var(--ink)';
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
+  setTimeout(() => {
+    t.classList.remove('show');
+    t.style.background = 'var(--ink)';
+  }, 3000);
 }
 
 // ─── Progress tracking ─────────────────────────────────────────
 const fields1 = ['fname','lname','email','phone','location'];
-const fields3 = ['channels_count','freq','followers'];
+const fields3 = ['channels_count','freq','followers', 'avg_views'];
 const fields4 = ['own_content','edit_tool'];
 
 function sectionDone(id) {
@@ -612,58 +616,102 @@ document.querySelectorAll('input, select, textarea').forEach(el => {
 document.getElementById('onboard-form').addEventListener('submit', async e => {
   e.preventDefault();
 
-  const channelDetails = [];
-  document.querySelectorAll('[data-platform]').forEach(el => {
-    if (el.value.trim()) channelDetails.push(`${el.dataset.platform}: ${el.value.trim()}`);
+  // Collect channel handles and links
+  const channelHandlesLinks = [];
+  document.querySelectorAll('.platform-handle').forEach(input => {
+    const platform = input.dataset.platform;
+    const handle = input.value.trim();
+    const linkInput = document.querySelector(`.platform-link[data-platform="${platform}"]`);
+    const link = linkInput ? linkInput.value.trim() : '';
+    if (handle || link) {
+      channelHandlesLinks.push(`${PLATFORM_LABELS[platform]}: ${handle} | Link: ${link || 'Not provided'}`);
+    }
   });
 
   const contentTypes = [...document.querySelectorAll('.tag-pill.on')]
     .map(p => p.textContent).join(', ');
 
-  const payload = {
-    firstName:      document.getElementById('fname').value.trim(),
-    lastName:       document.getElementById('lname').value.trim(),
-    email:          document.getElementById('email').value.trim(),
-    phone:          document.getElementById('phone').value.trim(),
-    location:       document.getElementById('location').value.trim(),
-    platforms:      [...selectedPlatforms].join(', '),
-    channelDetails: channelDetails.join(' | '),
-    channelCount:   document.getElementById('channels_count').value.trim(),
-    frequency:      document.getElementById('freq').value.trim(),
-    followers:      document.getElementById('followers').value.trim(),
-    avgViews:       document.getElementById('avg_views').value.trim(),
-    contentTypes,
-    ownContent:     document.getElementById('own_content').value.trim(),
-    editingTool:    document.getElementById('edit_tool').value.trim(),
-    sampleLinks:    document.getElementById('sample_links').value.trim(),
+  // Build data object with EXACT parameter names that your script expects
+  const postData = {
+    firstName: document.getElementById('fname').value.trim(),
+    lastName: document.getElementById('lname').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    phone: document.getElementById('phone').value.trim(),
+    location: document.getElementById('location').value.trim(),
+    platforms: [...selectedPlatforms].join(', '),
+    channelDetails: channelHandlesLinks.join(' | '),
+    channelCount: document.getElementById('channels_count').value.trim(),
+    frequency: document.getElementById('freq').value,
+    followers: document.getElementById('followers').value.trim(),
+    avgViews: document.getElementById('avg_views').value.trim(),
+    contentTypes: contentTypes,
+    ownContent: document.getElementById('own_content').value,
+    editingTool: document.getElementById('edit_tool').value.trim(),
+    sampleLinks: document.getElementById('sample_links').value.trim()
   };
 
+  // Validate required fields
+  if (!postData.firstName || !postData.lastName || !postData.email) {
+    showToast('❌ Please fill in your name and email', true);
+    return;
+  }
+
+  if (selectedPlatforms.size === 0) {
+    showToast('❌ Please select at least one platform', true);
+    return;
+  }
+
   const btn = document.querySelector('.submit-btn');
-  btn.textContent = 'Submitting…';
+  const originalText = btn.textContent;
+  btn.textContent = 'Submitting...';
   btn.disabled = true;
 
   try {
-    // URL-encoded form works with Apps Script no-cors; JSON does not
+    showToast('📤 Submitting to Your information..');
+    
+    // Convert to URL encoded string
     const formBody = new URLSearchParams();
-    Object.entries(payload).forEach(([k, v]) => formBody.append(k, v ?? ''));
-
-    await fetch(SHEET_URL, {
+    for (const [key, value] of Object.entries(postData)) {
+      if (value) {
+        formBody.append(key, value);
+      }
+    }
+    
+    console.log('Sending data:', Object.fromEntries(formBody));
+    
+    // Send to Google Apps Script
+    const response = await fetch(SHEET_URL, {
       method: 'POST',
       mode: 'no-cors',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
       body: formBody.toString()
     });
+    
+    // Show success UI
+    document.getElementById('onboard-form').style.display = 'none';
+    document.getElementById('success').classList.add('show');
+    launchConfetti();
+    showToast('✅ Onboarding complete!');
+    
+    // Reset form (optional)
+    setTimeout(() => {
+      document.getElementById('onboard-form').reset();
+    }, 100);
+    
   } catch (err) {
-    console.warn('Submission error:', err);
+    console.error('Submission error:', err);
+    showToast('❌ Submission failed: ' + err.message, true);
+    btn.textContent = originalText;
+    btn.disabled = false;
   }
-
-  document.getElementById('onboard-form').style.display = 'none';
-  document.getElementById('success').classList.add('show');
-  launchConfetti();
-  showToast('✅ Onboarding complete!');
 });
 
+// Initial progress check
+setTimeout(updateProgress, 100);
 updateProgress();
+
 </script>
 </body>
 </html>
