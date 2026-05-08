@@ -1,717 +1,477 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Creator Onboarding</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --pink:#FF6B9D;--purple:#A855F7;--blue:#3B9EFF;--green:#22C997;--orange:#FF9A3C;--yellow:#FFD93D;
+  --soft:#fafafa;--border:#f0f0f0;--text:#1a1a2e;--muted:#9ca3af;
+}
+body{font-family:'Inter',sans-serif;background:#fff;min-height:100vh;color:var(--text);}
 
-  :root {
-    --bg: #F7F5F0;
-    --ink: #1A1814;
-    --muted: #8A8780;
-    --accent: #E8502A;
-    --accent2: #3B5BDB;
-    --card: #FFFFFF;
-    --border: #E2DFD8;
-    --success: #2D9B57;
-    --gold: #C9A227;
-  }
+/* Steps nav */
+.steps-nav{display:flex;justify-content:center;gap:6px;padding:24px 20px 0;}
+.step-dot{width:8px;height:8px;border-radius:99px;background:var(--border);transition:all 0.3s;cursor:pointer;}
+.step-dot.active{width:28px;background:var(--purple);}
+.step-dot.done{background:var(--green);}
 
-  body {
-    font-family: 'DM Mono', monospace;
-    background: var(--bg);
-    color: var(--ink);
-    min-height: 100vh;
-    padding: 2rem 1rem 4rem;
-  }
+/* Pages */
+.page{display:none;padding:32px 24px 24px;max-width:480px;margin:0 auto;animation:fadeUp 0.35s ease;}
+.page.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
 
-  #confetti-canvas {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 9999;
-  }
+/* Page header */
+.page-tag{display:inline-flex;align-items:center;gap:6px;font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:4px 12px;border-radius:99px;margin-bottom:14px;}
+.page-title{font-size:1.6rem;font-weight:800;line-height:1.2;margin-bottom:6px;}
+.page-sub{font-size:0.85rem;color:var(--muted);margin-bottom:28px;line-height:1.5;}
 
-  .container { max-width: 720px; margin: 0 auto; }
+/* Fields */
+.field{margin-bottom:18px;}
+.field label{display:block;font-size:0.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;}
+.field input,.field select,.field textarea{
+  width:100%;padding:13px 16px;border:2px solid var(--border);border-radius:14px;
+  font-size:0.9rem;font-family:'Inter',sans-serif;color:var(--text);background:#fff;
+  outline:none;transition:all 0.2s;-webkit-appearance:none;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--purple);box-shadow:0 0 0 4px rgba(168,85,247,0.1);}
+.field input::placeholder,.field textarea::placeholder{color:#d1d5db;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.handle-wrap{position:relative;}
+.handle-prefix{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:0.88rem;color:var(--muted);font-weight:600;pointer-events:none;}
+.handle-wrap input{padding-left:32px;}
 
-  .header {
-    text-align: center;
-    margin-bottom: 3rem;
-    animation: fadeUp 0.6s ease both;
-  }
-  .header-tag {
-    display: inline-block;
-    font-size: 0.65rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--muted);
-    border: 1px solid var(--border);
-    padding: 0.3rem 0.9rem;
-    border-radius: 2rem;
-    margin-bottom: 1.2rem;
-  }
-  .header h1 {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(2rem, 6vw, 3rem);
-    line-height: 1.1;
-    margin-bottom: 0.6rem;
-    color: var(--ink);
-  }
-  .header h1 em { color: var(--accent); font-style: italic; }
-  .header p { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.04em; }
+/* Platform cards */
+.platform-grid{display:flex;flex-direction:column;gap:10px;}
+.p-card{border:2px solid var(--border);border-radius:16px;padding:14px 16px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;}
+.p-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:4px 0 0 4px;background:transparent;transition:background 0.2s;}
+.p-card.active{border-color:transparent;box-shadow:0 4px 20px rgba(0,0,0,0.08);}
+.p-card.active::before{background:var(--accent);}
+.p-header{display:flex;align-items:center;justify-content:space-between;}
+.p-label{display:flex;align-items:center;gap:10px;font-weight:700;font-size:0.92rem;}
+.p-icon-wrap{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.toggle{position:relative;width:44px;height:26px;cursor:pointer;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;}
+.slider{position:absolute;inset:0;background:#e5e7eb;border-radius:99px;transition:0.2s;}
+.slider:before{content:'';position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:0.2s;box-shadow:0 1px 4px rgba(0,0,0,0.18);}
+input:checked+.slider{background:var(--accent);}
+input:checked+.slider:before{transform:translateX(18px);}
+.p-fields{max-height:0;overflow:hidden;transition:max-height 0.35s ease;}
+.p-fields.open{max-height:500px;margin-top:16px;}
 
-  .progress-wrap {
-    margin-bottom: 2.5rem;
-    animation: fadeUp 0.6s 0.1s ease both;
-  }
-  .progress-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 0.5rem;
-  }
-  .progress-track { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
-  .progress-fill {
-    height: 100%;
-    background: var(--accent);
-    border-radius: 2px;
-    width: 0%;
-    transition: width 0.5s cubic-bezier(.4,0,.2,1);
-  }
+/* Chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+.chip{padding:8px 14px;border-radius:99px;border:2px solid var(--border);font-size:0.78rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.18s;user-select:none;display:flex;align-items:center;gap:5px;}
+.chip.selected{color:#fff;border-color:transparent;}
+.chip:nth-child(1).selected{background:var(--pink);}
+.chip:nth-child(2).selected{background:var(--purple);}
+.chip:nth-child(3).selected{background:var(--blue);}
+.chip:nth-child(4).selected{background:var(--orange);}
+.chip:nth-child(5).selected{background:var(--green);}
+.chip:nth-child(6).selected{background:var(--yellow);color:#333;}
+.chip:nth-child(7).selected{background:#FF6B6B;}
+.chip:nth-child(8).selected{background:#5B8DEF;}
 
-  .section {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 2rem;
-    margin-bottom: 1.25rem;
-    animation: fadeUp 0.6s ease both;
-    position: relative;
-    overflow: hidden;
-  }
-  .section::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 3px; height: 100%;
-    background: var(--border);
-    transition: background 0.3s;
-  }
-  .section.active::before { background: var(--accent); }
-  .section.done::before { background: var(--success); }
+/* Buttons */
+.btn-row{display:flex;gap:10px;margin-top:8px;}
+.btn{flex:1;padding:15px;border-radius:14px;font-size:0.92rem;font-weight:700;border:none;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;}
+.btn-back{background:var(--soft);color:var(--muted);}
+.btn-back:hover{background:var(--border);}
+.btn-next{color:#fff;box-shadow:0 4px 14px rgba(168,85,247,0.35);}
+.btn-next:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(168,85,247,0.45);}
+.btn-submit{color:#fff;box-shadow:0 4px 14px rgba(34,201,151,0.35);display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-submit:hover{transform:translateY(-1px);}
+.btn-submit:disabled{opacity:0.7;cursor:not-allowed;transform:none;}
 
-  .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
-  .section-num {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.5rem;
-    color: var(--border);
-    line-height: 1;
-    transition: color 0.3s;
-    min-width: 1.8rem;
-  }
-  .section.active .section-num { color: var(--accent); }
-  .section.done .section-num { color: var(--success); }
-  .section-title { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink); }
-  .section-check {
-    margin-left: auto;
-    width: 20px; height: 20px;
-    border: 1.5px solid var(--border);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.65rem;
-    color: transparent;
-    transition: all 0.3s;
-  }
-  .section.done .section-check { background: var(--success); border-color: var(--success); color: #fff; }
+/* Progress bar */
+.progress-wrap{height:3px;background:var(--border);position:fixed;top:0;left:0;width:100%;z-index:100;}
+.progress-fill{height:100%;transition:width 0.4s ease;width:0%;}
 
-  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
-  .field-row.full { grid-template-columns: 1fr; }
-  @media (max-width: 520px) { .field-row { grid-template-columns: 1fr; } }
+/* Number input with milestone glow */
+.milestone-input{transition:box-shadow 0.3s;}
+.milestone-input.glow{box-shadow:0 0 0 4px rgba(255,215,0,0.3)!important;border-color:var(--yellow)!important;}
 
-  .field { display: flex; flex-direction: column; gap: 0.4rem; }
-  label { font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
-  input, select, textarea {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.82rem;
-    border: 1px solid var(--border);
-    border-radius: 7px;
-    padding: 0.65rem 0.85rem;
-    background: var(--bg);
-    color: var(--ink);
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    width: 100%;
-  }
-  input:focus, select:focus, textarea:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(232,80,42,0.08);
-  }
-  input::placeholder, textarea::placeholder { color: var(--border); }
-  textarea { resize: vertical; min-height: 80px; }
-  select { appearance: none; cursor: pointer; }
+/* Celebration */
+.confetti-piece{position:fixed;pointer-events:none;z-index:9999;border-radius:3px;animation:confettiFall linear forwards;}
+@keyframes confettiFall{0%{transform:translateY(-10px) rotate(0deg) scale(1);opacity:1;}100%{transform:translateY(110vh) rotate(900deg) scale(0.5);opacity:0;}}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);z-index:10000;
+  background:var(--text);color:#fff;padding:12px 24px;border-radius:99px;
+  font-size:0.9rem;font-weight:700;white-space:nowrap;opacity:0;pointer-events:none;
+  transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-  .sub-field { position: relative; }
-  .sub-field input { padding-right: 3.5rem; }
-  .sub-badge {
-    position: absolute;
-    right: 0.7rem;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 0.6rem;
-    background: var(--gold);
-    color: #fff;
-    padding: 0.15rem 0.4rem;
-    border-radius: 3px;
-    letter-spacing: 0.08em;
-    opacity: 0;
-    transition: opacity 0.3s;
-    pointer-events: none;
-    font-weight: 500;
-  }
-  .sub-badge.show { opacity: 1; }
-
-  .platform-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1rem; }
-  .platform-card {
-    border: 1.5px solid var(--border);
-    border-radius: 9px;
-    padding: 1rem 0.75rem;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.25s;
-    user-select: none;
-  }
-  .platform-card:hover { border-color: var(--muted); transform: translateY(-1px); }
-  .platform-card.selected { border-color: var(--accent); background: rgba(232,80,42,0.05); }
-  .platform-icon { font-size: 1.4rem; margin-bottom: 0.4rem; }
-  .platform-name { font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
-  .platform-card.selected .platform-name { color: var(--accent); }
-
-  .tag-group { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-  .tag-pill {
-    font-size: 0.65rem;
-    letter-spacing: 0.08em;
-    border: 1px solid var(--border);
-    border-radius: 2rem;
-    padding: 0.35rem 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    user-select: none;
-    color: var(--muted);
-  }
-  .tag-pill:hover { border-color: var(--ink); color: var(--ink); }
-  .tag-pill.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-
-  .submit-wrap { text-align: center; margin-top: 2rem; animation: fadeUp 0.6s 0.3s ease both; }
-  .submit-btn {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    background: var(--ink);
-    color: var(--bg);
-    border: none;
-    border-radius: 8px;
-    padding: 1rem 3rem;
-    cursor: pointer;
-    transition: all 0.25s;
-  }
-  .submit-btn:hover { background: var(--accent); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(232,80,42,0.25); }
-  .submit-btn:active { transform: translateY(0); }
-  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-  .success-screen { display: none; text-align: center; padding: 4rem 2rem; animation: fadeUp 0.6s ease both; }
-  .success-screen.show { display: block; }
-  .success-icon { font-size: 3rem; margin-bottom: 1.5rem; }
-  .success-screen h2 { font-family: 'DM Serif Display', serif; font-size: 2rem; margin-bottom: 0.75rem; }
-  .success-screen p { font-size: 0.75rem; color: var(--muted); }
-
-  .toast {
-    position: fixed;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%) translateY(6rem);
-    background: var(--ink);
-    color: var(--bg);
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    padding: 0.8rem 1.5rem;
-    border-radius: 2rem;
-    transition: transform 0.4s cubic-bezier(.34,1.56,.64,1);
-    z-index: 1000;
-    white-space: nowrap;
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+/* Success */
+.success-page{text-align:center;padding:60px 24px;}
+.success-emoji{font-size:4rem;margin-bottom:20px;display:block;animation:bounce 0.6s ease;}
+@keyframes bounce{0%{transform:scale(0);}60%{transform:scale(1.2);}100%{transform:scale(1);}}
+.success-page h2{font-size:1.8rem;font-weight:800;margin-bottom:10px;}
+.success-page p{color:var(--muted);font-size:0.9rem;line-height:1.6;}
 </style>
 </head>
 <body>
-<canvas id="confetti-canvas"></canvas>
-<div class="toast" id="toast"></div>
 
-<div class="container">
-  <div class="header">
-    <div class="header-tag">Marketing Team · Creator Onboarding</div>
-    <h1>Tell us about<br>your <em>channels</em></h1>
-    <p>Fill in the details below — takes about 3 minutes</p>
+<div class="progress-wrap"><div class="progress-fill" id="pFill"></div></div>
+
+<div class="steps-nav" id="stepsNav">
+  <div class="step-dot active" onclick="goTo(0)"></div>
+  <div class="step-dot" onclick="goTo(1)"></div>
+  <div class="step-dot" onclick="goTo(2)"></div>
+</div>
+
+<!-- Page 1: Identity -->
+<div class="page active" id="page0">
+  <div class="page-tag" style="background:#FFF0F6;color:var(--pink);">👋 Step 1 of 3</div>
+  <div class="page-title">Hey, let's get<br/>to know you.</div>
+  <div class="page-sub">Just the basics — who you are and where you're from.</div>
+
+  <div class="two-col">
+    <div class="field"><label>First Name</label><input type="text" id="firstName" placeholder="Avanish" oninput="updateProgress()"/></div>
+    <div class="field"><label>Last Name</label><input type="text" id="lastName" placeholder="Mundra" oninput="updateProgress()"/></div>
   </div>
+  <div class="field"><label>Email</label><input type="email" id="email" placeholder="avanish@example.com" oninput="updateProgress()"/></div>
+  <div class="field"><label>Phone / WhatsApp</label><input type="tel" id="phone" placeholder="+91 234 567 8900" oninput="updateProgress()"/></div>
+  <div class="field"><label>City, Country</label><input type="text" id="location" placeholder="Delhi, India" oninput="updateProgress()"/></div>
 
-  <div class="progress-wrap">
-    <div class="progress-labels">
-      <span>Progress</span>
-      <span id="progress-pct">0%</span>
-    </div>
-    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
-  </div>
-
-  <form id="onboard-form" novalidate>
-
-    <!-- Section 1: Identity -->
-    <div class="section" id="sec1" style="animation-delay:0.05s">
-      <div class="section-header">
-        <span class="section-num">01</span>
-        <span class="section-title">Your Identity</span>
-        <div class="section-check" id="chk1">✓</div>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label for="fname">First Name</label>
-          <input type="text" id="fname" placeholder="Avanish" autocomplete="given-name">
-        </div>
-        <div class="field">
-          <label for="lname">Last Name</label>
-          <input type="text" id="lname" placeholder="Sharma" autocomplete="family-name">
-        </div>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label for="email">Email</label>
-          <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
-        </div>
-        <div class="field">
-          <label for="phone">Phone / WhatsApp</label>
-          <input type="tel" id="phone" placeholder="+91 99999 00000" autocomplete="tel">
-        </div>
-      </div>
-      <div class="field-row full">
-        <div class="field">
-          <label for="location">Location (City, Country)</label>
-          <input type="text" id="location" placeholder="Mumbai, India">
-        </div>
-      </div>
-    </div>
-
-    <!-- Section 2: Platforms -->
-    <div class="section" id="sec2" style="animation-delay:0.1s">
-      <div class="section-header">
-        <span class="section-num">02</span>
-        <span class="section-title">Your Platforms</span>
-        <div class="section-check" id="chk2">✓</div>
-      </div>
-      <div class="platform-grid">
-        <div class="platform-card" data-platform="instagram" onclick="togglePlatform(this)">
-          <div class="platform-icon">📸</div>
-          <div class="platform-name">Instagram</div>
-        </div>
-        <div class="platform-card" data-platform="youtube" onclick="togglePlatform(this)">
-          <div class="platform-icon">▶️</div>
-          <div class="platform-name">YouTube</div>
-        </div>
-        <div class="platform-card" data-platform="whatsapp" onclick="togglePlatform(this)">
-          <div class="platform-icon">💬</div>
-          <div class="platform-name">WhatsApp</div>
-        </div>
-        <div class="platform-card" data-platform="twitter" onclick="togglePlatform(this)">
-          <div class="platform-icon">𝕏</div>
-          <div class="platform-name">X / Twitter</div>
-        </div>
-        <div class="platform-card" data-platform="tiktok" onclick="togglePlatform(this)">
-          <div class="platform-icon">🎵</div>
-          <div class="platform-name">TikTok</div>
-        </div>
-        <div class="platform-card" data-platform="linkedin" onclick="togglePlatform(this)">
-          <div class="platform-icon">💼</div>
-          <div class="platform-name">LinkedIn</div>
-        </div>
-      </div>
-      <div id="channel-fields"></div>
-    </div>
-
-    <!-- Section 3: Reach -->
-    <div class="section" id="sec3" style="animation-delay:0.15s">
-      <div class="section-header">
-        <span class="section-num">03</span>
-        <span class="section-title">Reach & Frequency</span>
-        <div class="section-check" id="chk3">✓</div>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label for="channels_count">No. of Channels / Accounts</label>
-          <input type="number" id="channels_count" placeholder="e.g. 3" min="0">
-        </div>
-        <div class="field">
-          <label for="freq">Posting Frequency</label>
-          <select id="freq">
-            <option value="">Select…</option>
-            <option>Daily</option>
-            <option>3–5x / week</option>
-            <option>1–2x / week</option>
-            <option>A few times / month</option>
-          </select>
-        </div>
-      </div>
-      <div class="field-row">
-        <div class="field sub-field">
-          <label for="followers">Total Followers / Subscribers</label>
-          <input type="number" id="followers" placeholder="e.g. 50000" min="0" oninput="handleFollowers(this)">
-          <span class="sub-badge" id="sub-badge"></span>
-        </div>
-        <div class="field">
-          <label for="avg_views">Avg. Views / Reach per Post</label>
-          <input type="number" id="avg_views" placeholder="e.g. 8000" min="0">
-        </div>
-      </div>
-    </div>
-
-    <!-- Section 4: Content -->
-    <div class="section" id="sec4" style="animation-delay:0.2s">
-      <div class="section-header">
-        <span class="section-num">04</span>
-        <span class="section-title">Content Details</span>
-        <div class="section-check" id="chk4">✓</div>
-      </div>
-      <div class="field-row full" style="margin-bottom:1.25rem">
-        <div class="field">
-          <label>Content Type</label>
-          <div class="tag-group" id="content-types">
-            <div class="tag-pill" onclick="toggleTag(this)">Reels</div>
-            <div class="tag-pill" onclick="toggleTag(this)">Stories</div>
-            <div class="tag-pill" onclick="toggleTag(this)">Long-form Video</div>
-            <div class="tag-pill" onclick="toggleTag(this)">Shorts</div>
-            <div class="tag-pill" onclick="toggleTag(this)">Carousels</div>
-            <div class="tag-pill" onclick="toggleTag(this)">Posters</div>
-            <div class="tag-pill" onclick="toggleTag(this)">Messages / Blasts</div>
-            <div class="tag-pill" onclick="toggleTag(this)">Podcasts</div>
-          </div>
-        </div>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label for="own_content">Do you make own content?</label>
-          <select id="own_content">
-            <option value="">Select…</option>
-            <option>Yes, 100% original</option>
-            <option>Mix of original & curated</option>
-            <option>Mostly curated / reposts</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="edit_tool">How do you edit content?</label>
-          <input type="text" id="edit_tool" placeholder="e.g. CapCut, Premiere, Canva">
-        </div>
-      </div>
-      <div class="field-row full">
-        <div class="field">
-          <label for="sample_links">Sample Links (Reels / Stories / Posts)</label>
-          <textarea id="sample_links" placeholder="Paste up to 3 links, one per line…"></textarea>
-        </div>
-      </div>
-    </div>
-
-    <div class="submit-wrap">
-      <button type="submit" class="submit-btn">Submit Onboarding →</button>
-    </div>
-  </form>
-
-  <div class="success-screen" id="success">
-    <div class="success-icon">🚀</div>
-    <h2>You're all set!</h2>
-    <p>We've received your onboarding details.<br>The team will reach out within 24 hours.</p>
+  <div class="btn-row">
+    <button class="btn btn-next" style="background:linear-gradient(135deg,var(--pink),var(--purple));" onclick="goTo(1)">Continue →</button>
   </div>
 </div>
 
+<!-- Page 2: Platforms -->
+<div class="page" id="page1">
+  <div class="page-tag" style="background:#F3EEFF;color:var(--purple);">📱 Step 2 of 3</div>
+  <div class="page-title">Your platforms<br/>& reach.</div>
+  <div class="page-sub">Toggle the ones you use. Fill in your numbers.</div>
+
+  <div class="platform-grid" id="platformGrid"></div>
+
+  <div class="btn-row" style="margin-top:20px;">
+    <button class="btn btn-back" onclick="goTo(0)">← Back</button>
+    <button class="btn btn-next" style="background:linear-gradient(135deg,var(--purple),var(--blue));" onclick="goTo(2)">Continue →</button>
+  </div>
+</div>
+
+<!-- Page 3: Content -->
+<div class="page" id="page2">
+  <div class="page-tag" style="background:#EDFDF8;color:var(--green);">🎨 Step 3 of 3</div>
+  <div class="page-title">Your content<br/>style.</div>
+  <div class="page-sub">Tell us what you create and how you make it.</div>
+
+  <div class="field">
+    <label>Content Types</label>
+    <div class="chips">
+      <div class="chip" onclick="toggleChip(this)">🎬 Reels</div>
+      <div class="chip" onclick="toggleChip(this)">📖 Stories</div>
+      <div class="chip" onclick="toggleChip(this)">🎥 Long-form</div>
+      <div class="chip" onclick="toggleChip(this)">▶️ Shorts</div>
+      <div class="chip" onclick="toggleChip(this)">🖼 Carousels</div>
+      <div class="chip" onclick="toggleChip(this)">🖨 Posters</div>
+      <div class="chip" onclick="toggleChip(this)">💬 Blasts</div>
+      <div class="chip" onclick="toggleChip(this)">🎙 Podcasts</div>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Do you make your own content?</label>
+    <select id="contentOrig" onchange="updateProgress()">
+      <option value="" disabled selected>Choose one…</option>
+      <option value="100% original">Yes, 100% original</option>
+      <option value="Mix of original & curated">Mix of original & curated</option>
+      <option value="Mostly curated / reposts">Mostly curated / reposts</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>How do you edit?</label>
+    <input type="text" id="contentEdit" placeholder="e.g. CapCut, Premiere, Canva…" oninput="updateProgress()"/>
+  </div>
+
+  <div class="field">
+    <label>Sample Links</label>
+    <textarea id="contentLinks" rows="3" placeholder="Paste your best links here, one per line…" style="resize:none;line-height:1.6;" oninput="updateProgress()"></textarea>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-back" onclick="goTo(1)">← Back</button>
+    <button class="btn btn-next btn-submit" id="submitBtn" style="background:linear-gradient(135deg,var(--green),var(--blue));" onclick="submitForm()">Submit 🚀</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
 <script>
-// ─── CONFIGURATION ─────────────────────────────────────────────
-// REPLACE THIS URL with your Google Apps Script Web App URL
-// Steps: Extensions → Apps Script → Deploy → New Deployment → Web App
-// Execute as: Me | Who has access: Anyone → Deploy → Copy URL
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwhAl6H7Z8rG8BiNFsmNkqofMHUxr847QH9xhtCq2PTwdp4BoxAC-BQBnFP3hv1FUWQ/exec';
+// ==========================================
+// CONNECTED GOOGLE SCRIPT URL
+// ==========================================
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwEl8LD3igTLDTWr2lD34L2_pZ0UruN65a_CQlxntvRWuxsdX3C9yb19hikrY_I21s2/exec';
 
+const platformData=[
+  {id:'instagram',icon:'📸',label:'Instagram',color:'#FF6B9D',bg:'#FFF0F6',handle:'@'},
+  {id:'youtube',  icon:'▶️',label:'YouTube',  color:'#FF4444',bg:'#FFF0F0',handle:'youtube.com/'},
+  {id:'whatsapp', icon:'💬',label:'WhatsApp', color:'#22C997',bg:'#EDFDF8',handle:'+'},
+  {id:'twitter',  icon:'𝕏', label:'X / Twitter',color:'#1a1a2e',bg:'#F5F5F7',handle:'@'},
+  {id:'tiktok',   icon:'🎵',label:'TikTok',   color:'#A855F7',bg:'#F3EEFF',handle:'@'},
+  {id:'linkedin', icon:'💼',label:'LinkedIn', color:'#3B9EFF',bg:'#EFF6FF',handle:'linkedin.com/in/'},
+];
 
-// ─── Platform toggle ───────────────────────────────────────────
-const selectedPlatforms = new Set();
+const milestones=[500,1000,2000,5000,10000,50000,100000];
+const reached={};
+const confColors=['#FF6B9D','#A855F7','#3B9EFF','#22C997','#FF9A3C','#FFD93D','#FF6B6B','#5B8DEF'];
 
-function togglePlatform(card) {
-  const p = card.dataset.platform;
-  card.classList.toggle('selected');
-  selectedPlatforms.has(p) ? selectedPlatforms.delete(p) : selectedPlatforms.add(p);
-  renderChannelFields();
+const freqOpts=[
+  {v:'',t:'Posting Frequency',d:true},
+  {v:'daily',t:'Daily'},
+  {v:'3-5',t:'3–5x / week'},
+  {v:'1-2',t:'1–2x / week'},
+  {v:'monthly',t:'A few times / month'},
+];
+
+function buildPlatforms(){
+  const grid=document.getElementById('platformGrid');
+  platformData.forEach(p=>{
+    reached[p.id]=0;
+    const fOpts=freqOpts.map(o=>`<option value="${o.v}"${o.d?' disabled selected':''}>${o.t}</option>`).join('');
+    const el=document.createElement('div');
+    el.className='p-card';
+    el.id='pc-'+p.id;
+    el.style.setProperty('--accent',p.color);
+    el.innerHTML=`
+      <div class="p-header">
+        <div class="p-label">
+          <div class="p-icon-wrap" style="background:${p.bg}">${p.icon}</div>
+          ${p.label}
+        </div>
+        <label class="toggle" onclick="event.stopPropagation()">
+          <input type="checkbox" onchange="toggleP('${p.id}',this.checked)">
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="p-fields" id="pf-${p.id}">
+        <div class="field">
+          <label>Handle</label>
+          <div class="handle-wrap">
+            <span class="handle-prefix">${p.handle}</span>
+            <input type="text" id="handle-${p.id}" placeholder="yourhandle" oninput="updateProgress()"/>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="field">
+            <label>Followers / Subs</label>
+            <input class="milestone-input" type="number" min="0" placeholder="0"
+              id="followers-${p.id}"
+              oninput="checkMilestone('${p.id}',this.value,this);updateProgress()"/>
+          </div>
+          <div class="field">
+            <label>Avg. Views / Reach</label>
+            <input type="number" id="views-${p.id}" min="0" placeholder="0" oninput="updateProgress()"/>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="field">
+            <label>No. of Accounts</label>
+            <input type="number" id="accounts-${p.id}" min="1" placeholder="1" oninput="updateProgress()"/>
+          </div>
+          <div class="field">
+            <label>Frequency</label>
+            <select id="freq-${p.id}" onchange="updateProgress()" style="--accent:${p.color}">${fOpts}</select>
+          </div>
+        </div>
+      </div>`;
+    grid.appendChild(el);
+  });
+}
+
+function toggleP(id,open){
+  document.getElementById('pf-'+id).classList.toggle('open',open);
+  const card=document.getElementById('pc-'+id);
+  card.classList.toggle('active',open);
+  if(open){
+    const p=platformData.find(x=>x.id===id);
+    card.style.background=open?'#fff':'';
+    card.querySelector('.p-icon-wrap').style.transform='scale(1.05)';
+    setTimeout(()=>card.querySelector('.p-icon-wrap').style.transform='',300);
+  }
   updateProgress();
 }
 
-const PLATFORM_LABELS = {
-  instagram: 'Instagram',
-  youtube: 'YouTube',
-  whatsapp: 'WhatsApp Channel',
-  twitter: 'X / Twitter',
-  tiktok: 'TikTok',
-  linkedin: 'LinkedIn'
+/* Milestone */
+const toastMsgs={
+  500:['Waooo! 500 followers! 🌱','Growing fast! 500 strong 🎉'],
+  1000:['1K!! Let\'s gooo! 👏👏','One THOUSAND! 🥳'],
+  2000:['2,000 followers! You\'re on fire 🔥','Waoooo!! 2K!! 🎊'],
+  5000:['5K CREATOR!! 🚀','FIVE THOUSAND!! You\'re huge 🌟'],
+  10000:['10K CLUB!! 🏆','TEN THOUSAND!! 😱 Waoooo!!'],
+  50000:['50K STAR!! ⭐ Incredible!','FIFTY THOUSAND!! 🤯'],
+  100000:['100K!! LEGEND 👑','One HUNDRED K!! 🎇 Waooooo!!'],
 };
 
-function renderChannelFields() {
-  const wrap = document.getElementById('channel-fields');
-  wrap.innerHTML = '';
-  if (!selectedPlatforms.size) return;
-  selectedPlatforms.forEach(p => {
-    const row = document.createElement('div');
-    row.className = 'field-row';
-    row.innerHTML = `
-      <div class="field">
-        <label>${PLATFORM_LABELS[p]} — Handle / Name</label>
-        <input type="text" placeholder="@handle or Channel Name" class="platform-handle" data-platform="${p}">
-      </div>
-      <div class="field">
-        <label>${PLATFORM_LABELS[p]} — Link</label>
-        <input type="url" placeholder="https://" class="platform-link" data-platform="${p}">
-      </div>`;
-    wrap.appendChild(row);
-    row.querySelectorAll('input').forEach(el => el.addEventListener('input', updateProgress));
-  });
-}
-
-// ─── Tag pills ─────────────────────────────────────────────────
-function toggleTag(pill) {
-  pill.classList.toggle('on');
-  updateProgress();
-}
-
-// ─── Follower milestone confetti ───────────────────────────────
-const milestones = [1000, 5000, 10000, 50000, 100000, 500000, 1000000];
-let lastMilestone = 0;
-
-function handleFollowers(input) {
-  const val = parseInt(input.value, 10) || 0;
-  const badge = document.getElementById('sub-badge');
-  if (val >= 1000000)      { badge.textContent = '💎 1M+';   badge.classList.add('show'); }
-  else if (val >= 100000)  { badge.textContent = '🔥 100K+'; badge.classList.add('show'); }
-  else if (val >= 10000)   { badge.textContent = '⭐ 10K+';  badge.classList.add('show'); }
-  else if (val >= 1000)    { badge.textContent = '✨ 1K+';   badge.classList.add('show'); }
-  else                     { badge.classList.remove('show'); }
-
-  const crossed = milestones.filter(m => val >= m);
-  if (crossed.length) {
-    const highest = crossed[crossed.length - 1];
-    if (highest !== lastMilestone) {
-      lastMilestone = highest;
-      const label = highest >= 1000000 ? `${highest/1000000}M` : `${highest/1000}K`;
-      showToast(`🎉 ${label} subscribers milestone!`);
-      launchConfetti();
-    }
-  } else { lastMilestone = 0; }
-
-  updateProgress();
-}
-
-// ─── Confetti ──────────────────────────────────────────────────
-const canvas = document.getElementById('confetti-canvas');
-const ctx = canvas.getContext('2d');
-let particles = [], animId = null;
-
-function launchConfetti() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  const colors = ['#E8502A','#3B5BDB','#C9A227','#2D9B57','#F7F5F0','#1A1814','#FF6B6B','#74C0FC'];
-  for (let i = 0; i < 160; i++) {
-    particles.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height * 0.4 - 20,
-      r: Math.random() * 6 + 3,
-      tiltAngle: 0,
-      tiltSpeed: Math.random() * 0.1 + 0.04,
-      vy: Math.random() * 3 + 2,
-      vx: Math.random() * 2 - 1,
-      opacity: 1,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      shape: Math.random() > 0.5 ? 'circle' : 'rect'
-    });
+function checkMilestone(pid,valStr,el){
+  const val=parseInt(valStr)||0;
+  let newPeak=0;
+  for(let i=milestones.length-1;i>=0;i--){if(val>=milestones[i]){newPeak=milestones[i];break;}}
+  if(newPeak>reached[pid]){
+    reached[pid]=newPeak;
+    const p=platformData.find(x=>x.id===pid);
+    celebrate(newPeak,p,el);
+  } else {
+    reached[pid]=newPeak;
   }
-  if (animId) cancelAnimationFrame(animId);
-  drawConfetti();
 }
 
-function drawConfetti() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  let alive = false;
-  particles.forEach(p => {
-    if (p.y < canvas.height + 20) alive = true;
-    p.tiltAngle += p.tiltSpeed;
-    p.y += p.vy;
-    p.x += p.vx + Math.sin(p.tiltAngle) * 0.6;
-    p.opacity = Math.max(0, p.opacity - 0.008);
-    ctx.globalAlpha = p.opacity;
-    ctx.fillStyle = p.color;
-    ctx.beginPath();
-    if (p.shape === 'circle') { ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); }
-    else { ctx.rect(p.x, p.y, p.r * 1.5, p.r * 0.8); }
-    ctx.fill();
-  });
-  ctx.globalAlpha = 1;
-  if (alive) animId = requestAnimationFrame(drawConfetti);
-  else { particles = []; ctx.clearRect(0, 0, canvas.width, canvas.height); }
+function celebrate(ms,p,inputEl){
+  blast(ms,p.color);
+  const msgs=toastMsgs[ms]||['Amazing! 🎉'];
+  showToast(p.icon+' '+msgs[Math.floor(Math.random()*msgs.length)],p.color);
+  if(inputEl){
+    inputEl.classList.add('glow');
+    setTimeout(()=>inputEl.classList.remove('glow'),1200);
+  }
 }
 
-// ─── Toast ─────────────────────────────────────────────────────
-function showToast(msg, isError = false) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.background = isError ? '#E8502A' : 'var(--ink)';
+function blast(ms,accentColor){
+  const count=ms>=10000?100:ms>=5000?75:ms>=2000?55:ms>=1000?40:28;
+  for(let i=0;i<count;i++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    const size=(Math.random()*10+5)+'px';
+    const colors=[accentColor,...confColors];
+    el.style.cssText=`
+      left:${Math.random()*100}vw;top:-10px;
+      width:${size};height:${size};
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      border-radius:${Math.random()>0.5?'50%':'3px'};
+      animation-duration:${1.5+Math.random()*2}s;
+      animation-delay:${Math.random()*0.4}s;`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),4000);
+  }
+}
+
+let toastTimer;
+function showToast(msg,color){
+  const t=document.getElementById('toast');
+  clearTimeout(toastTimer);
+  t.style.background=color||'#1a1a2e';
+  t.textContent=msg;
   t.classList.add('show');
-  setTimeout(() => {
-    t.classList.remove('show');
-    t.style.background = 'var(--ink)';
-  }, 3000);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2600);
 }
 
-// ─── Progress tracking ─────────────────────────────────────────
-const fields1 = ['fname','lname','email','phone','location'];
-const fields3 = ['channels_count','freq','followers', 'avg_views'];
-const fields4 = ['own_content','edit_tool'];
-
-function sectionDone(id) {
-  if (id === 1) return fields1.every(f => document.getElementById(f)?.value.trim());
-  if (id === 2) return selectedPlatforms.size > 0;
-  if (id === 3) return fields3.every(f => document.getElementById(f)?.value.trim());
-  if (id === 4) return document.querySelectorAll('.tag-pill.on').length > 0 && fields4.every(f => document.getElementById(f)?.value.trim());
-  return false;
-}
-
-function updateProgress() {
-  let done = 0;
-  [1,2,3,4].forEach(i => {
-    const d = sectionDone(i);
-    document.getElementById(`sec${i}`).classList.toggle('done', d);
-    document.getElementById(`sec${i}`).classList.toggle('active', !d);
-    if (d) done++;
+/* Navigation */
+let curPage=0;
+function goTo(n){
+  document.getElementById('page'+curPage).classList.remove('active');
+  document.getElementById('page'+n).classList.add('active');
+  const dots=document.querySelectorAll('.step-dot');
+  dots.forEach((d,i)=>{
+    d.classList.remove('active','done');
+    if(i===n)d.classList.add('active');
+    else if(i<n)d.classList.add('done');
   });
-  const pct = Math.round(done / 4 * 100);
-  document.getElementById('progress-fill').style.width = pct + '%';
-  document.getElementById('progress-pct').textContent = pct + '%';
+  curPage=n;
+  updateProgress();
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-document.querySelectorAll('input, select, textarea').forEach(el => {
-  el.addEventListener('input', updateProgress);
-  el.addEventListener('change', updateProgress);
-});
+function updateProgress(){
+  const all=[...document.querySelectorAll('.page.active input:not([type=checkbox]),.page.active select,.page.active textarea')];
+  const filled=all.filter(i=>i.value&&i.value!=='').length;
+  const base=(curPage/3)*100;
+  const pageContrib=(filled/Math.max(all.length,1))*(100/3);
+  document.getElementById('pFill').style.width=Math.min(100,base+pageContrib)+'%';
+  document.getElementById('pFill').style.background=
+    curPage===0?'linear-gradient(90deg,var(--pink),var(--purple))':
+    curPage===1?'linear-gradient(90deg,var(--purple),var(--blue))':
+    'linear-gradient(90deg,var(--green),var(--blue))';
+}
 
-// ─── Submit → Google Sheets ────────────────────────────────────
-document.getElementById('onboard-form').addEventListener('submit', async e => {
-  e.preventDefault();
+function toggleChip(el){
+  el.classList.toggle('selected');
+  updateProgress();
+}
 
-  // Collect channel handles and links
-  const channelHandlesLinks = [];
-  document.querySelectorAll('.platform-handle').forEach(input => {
-    const platform = input.dataset.platform;
-    const handle = input.value.trim();
-    const linkInput = document.querySelector(`.platform-link[data-platform="${platform}"]`);
-    const link = linkInput ? linkInput.value.trim() : '';
-    if (handle || link) {
-      channelHandlesLinks.push(`${PLATFORM_LABELS[platform]}: ${handle} | Link: ${link || 'Not provided'}`);
+// ==============================================================
+// SUBMIT FUNCTION CONNECTED TO BACKEND
+// ==============================================================
+async function submitForm(){
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = `Submitting... ⏳`;
+
+  // 1. Gather Basic Info
+  const firstName = document.getElementById('firstName').value;
+  const lastName = document.getElementById('lastName').value;
+  const email = document.getElementById('email').value;
+  const phone = document.getElementById('phone').value;
+  const location = document.getElementById('location').value;
+
+  // 2. Gather Platforms Data
+  const platforms = {};
+  platformData.forEach(p => {
+    const card = document.getElementById('pc-' + p.id);
+    if(card.classList.contains('active')) {
+      platforms[p.id] = {
+        handle: document.getElementById('handle-' + p.id).value,
+        followers: document.getElementById('followers-' + p.id).value,
+        views: document.getElementById('views-' + p.id).value,
+        accounts: document.getElementById('accounts-' + p.id).value,
+        frequency: document.getElementById('freq-' + p.id).value
+      };
     }
   });
 
-  const contentTypes = [...document.querySelectorAll('.tag-pill.on')]
-    .map(p => p.textContent).join(', ');
+  // 3. Gather Content Styles
+  const selectedChips = Array.from(document.querySelectorAll('.chip.selected'));
 
-  // Build data object with EXACT parameter names that your script expects
-  const postData = {
-    firstName: document.getElementById('fname').value.trim(),
-    lastName: document.getElementById('lname').value.trim(),
-    email: document.getElementById('email').value.trim(),
-    phone: document.getElementById('phone').value.trim(),
-    location: document.getElementById('location').value.trim(),
-    platforms: [...selectedPlatforms].join(', '),
-    channelDetails: channelHandlesLinks.join(' | '),
-    channelCount: document.getElementById('channels_count').value.trim(),
-    frequency: document.getElementById('freq').value,
-    followers: document.getElementById('followers').value.trim(),
-    avgViews: document.getElementById('avg_views').value.trim(),
-    contentTypes: contentTypes,
-    ownContent: document.getElementById('own_content').value,
-    editingTool: document.getElementById('edit_tool').value.trim(),
-    sampleLinks: document.getElementById('sample_links').value.trim()
+  // FIX APPLIED HERE: Removed the regex that was corrupting emoji characters.
+  const contentTypes = selectedChips.map(chip => chip.textContent.trim());
+
+  const originality = document.getElementById('contentOrig').value;
+  const editor = document.getElementById('contentEdit').value;
+  const links = document.getElementById('contentLinks').value;
+
+  // 4. Create the JSON payload
+  const payload = {
+    firstName, lastName, email, phone, location,
+    platforms, contentTypes, originality, editor, links
   };
 
-  // Validate required fields
-  if (!postData.firstName || !postData.lastName || !postData.email) {
-    showToast('❌ Please fill in your name and email', true);
-    return;
-  }
-
-  if (selectedPlatforms.size === 0) {
-    showToast('❌ Please select at least one platform', true);
-    return;
-  }
-
-  const btn = document.querySelector('.submit-btn');
-  const originalText = btn.textContent;
-  btn.textContent = 'Submitting...';
-  btn.disabled = true;
-
   try {
-    showToast('📤 Submitting to Your information..');
-    
-    // Convert to URL encoded string
-    const formBody = new URLSearchParams();
-    for (const [key, value] of Object.entries(postData)) {
-      if (value) {
-        formBody.append(key, value);
-      }
-    }
-    
-    console.log('Sending data:', Object.fromEntries(formBody));
-    
-    // Send to Google Apps Script
-    const response = await fetch(SHEET_URL, {
+    // Send the data using text/plain to bypass complex CORS preflight issues on Google Apps Script
+    await fetch(SCRIPT_URL, {
       method: 'POST',
-      mode: 'no-cors',
+      body: JSON.stringify(payload),
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: formBody.toString()
+        'Content-Type': 'text/plain;charset=utf-8',
+      }
     });
-    
-    // Show success UI
-    document.getElementById('onboard-form').style.display = 'none';
-    document.getElementById('success').classList.add('show');
-    launchConfetti();
-    showToast('✅ Onboarding complete!');
-    
-    // Reset form (optional)
-    setTimeout(() => {
-      document.getElementById('onboard-form').reset();
-    }, 100);
-    
-  } catch (err) {
-    console.error('Submission error:', err);
-    showToast('❌ Submission failed: ' + err.message, true);
-    btn.textContent = originalText;
+
+    // Success Sequence
+    blast(5000,'#22C997');
+    showToast('🚀 You\'re all set! Welcome aboard!','#22C997');
+    document.getElementById('page2').innerHTML=`
+      <div class="success-page">
+        <span class="success-emoji">🎉</span>
+        <h2>You're all set!</h2>
+        <p>We've received your details.<br/>The team will reach out within 24 hours.</p>
+      </div>`;
+    document.getElementById('pFill').style.width='100%';
+    document.getElementById('pFill').style.background='linear-gradient(90deg,var(--green),var(--blue))';
+
+  } catch(error) {
+    console.error("Submission failed: ", error);
+    showToast('❌ Failed to save. Please try again.', '#FF4444');
     btn.disabled = false;
+    btn.innerHTML = `Submit 🚀`;
   }
-});
+}
 
-// Initial progress check
-setTimeout(updateProgress, 100);
+buildPlatforms();
 updateProgress();
-
 </script>
 </body>
 </html>
