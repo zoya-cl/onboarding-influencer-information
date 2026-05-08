@@ -28,7 +28,6 @@
     padding: 2rem 1rem 4rem;
   }
 
-  /* confetti canvas */
   #confetti-canvas {
     position: fixed;
     inset: 0;
@@ -36,12 +35,8 @@
     z-index: 9999;
   }
 
-  .container {
-    max-width: 720px;
-    margin: 0 auto;
-  }
+  .container { max-width: 720px; margin: 0 auto; }
 
-  /* Header */
   .header {
     text-align: center;
     margin-bottom: 3rem;
@@ -65,17 +60,9 @@
     margin-bottom: 0.6rem;
     color: var(--ink);
   }
-  .header h1 em {
-    color: var(--accent);
-    font-style: italic;
-  }
-  .header p {
-    font-size: 0.75rem;
-    color: var(--muted);
-    letter-spacing: 0.04em;
-  }
+  .header h1 em { color: var(--accent); font-style: italic; }
+  .header p { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.04em; }
 
-  /* Progress bar */
   .progress-wrap {
     margin-bottom: 2.5rem;
     animation: fadeUp 0.6s 0.1s ease both;
@@ -89,12 +76,7 @@
     color: var(--muted);
     margin-bottom: 0.5rem;
   }
-  .progress-track {
-    height: 3px;
-    background: var(--border);
-    border-radius: 2px;
-    overflow: hidden;
-  }
+  .progress-track { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
   .progress-fill {
     height: 100%;
     background: var(--accent);
@@ -103,7 +85,6 @@
     transition: width 0.5s cubic-bezier(.4,0,.2,1);
   }
 
-  /* Section cards */
   .section {
     background: var(--card);
     border: 1px solid var(--border);
@@ -125,12 +106,7 @@
   .section.active::before { background: var(--accent); }
   .section.done::before { background: var(--success); }
 
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-  }
+  .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
   .section-num {
     font-family: 'DM Serif Display', serif;
     font-size: 1.5rem;
@@ -141,12 +117,7 @@
   }
   .section.active .section-num { color: var(--accent); }
   .section.done .section-num { color: var(--success); }
-  .section-title {
-    font-size: 0.7rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--ink);
-  }
+  .section-title { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink); }
   .section-check {
     margin-left: auto;
     width: 20px; height: 20px;
@@ -157,33 +128,14 @@
     color: transparent;
     transition: all 0.3s;
   }
-  .section.done .section-check {
-    background: var(--success);
-    border-color: var(--success);
-    color: #fff;
-  }
+  .section.done .section-check { background: var(--success); border-color: var(--success); color: #fff; }
 
-  /* Fields */
-  .field-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 1rem;
-  }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
   .field-row.full { grid-template-columns: 1fr; }
   @media (max-width: 520px) { .field-row { grid-template-columns: 1fr; } }
 
-  .field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-  label {
-    font-size: 0.6rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
+  .field { display: flex; flex-direction: column; gap: 0.4rem; }
+  label { font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
   input, select, textarea {
     font-family: 'DM Mono', monospace;
     font-size: 0.82rem;
@@ -204,13 +156,8 @@
   textarea { resize: vertical; min-height: 80px; }
   select { appearance: none; cursor: pointer; }
 
-  /* Subscriber input special */
-  .sub-field {
-    position: relative;
-  }
-  .sub-field input {
-    padding-right: 3.5rem;
-  }
+  .sub-field { position: relative; }
+  .sub-field input { padding-right: 3.5rem; }
   .sub-badge {
     position: absolute;
     right: 0.7rem;
@@ -229,13 +176,7 @@
   }
   .sub-badge.show { opacity: 1; }
 
-  /* Platforms grid */
-  .platform-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-  }
+  .platform-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1rem; }
   .platform-card {
     border: 1.5px solid var(--border);
     border-radius: 9px;
@@ -246,20 +187,12 @@
     user-select: none;
   }
   .platform-card:hover { border-color: var(--muted); transform: translateY(-1px); }
-  .platform-card.selected {
-    border-color: var(--accent);
-    background: rgba(232,80,42,0.05);
-  }
+  .platform-card.selected { border-color: var(--accent); background: rgba(232,80,42,0.05); }
   .platform-icon { font-size: 1.4rem; margin-bottom: 0.4rem; }
   .platform-name { font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
   .platform-card.selected .platform-name { color: var(--accent); }
 
-  /* Content type checkboxes */
-  .tag-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
+  .tag-group { display: flex; flex-wrap: wrap; gap: 0.5rem; }
   .tag-pill {
     font-size: 0.65rem;
     letter-spacing: 0.08em;
@@ -274,12 +207,7 @@
   .tag-pill:hover { border-color: var(--ink); color: var(--ink); }
   .tag-pill.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 
-  /* Submit button */
-  .submit-wrap {
-    text-align: center;
-    margin-top: 2rem;
-    animation: fadeUp 0.6s 0.3s ease both;
-  }
+  .submit-wrap { text-align: center; margin-top: 2rem; animation: fadeUp 0.6s 0.3s ease both; }
   .submit-btn {
     font-family: 'DM Mono', monospace;
     font-size: 0.75rem;
@@ -292,32 +220,17 @@
     padding: 1rem 3rem;
     cursor: pointer;
     transition: all 0.25s;
-    position: relative;
-    overflow: hidden;
   }
   .submit-btn:hover { background: var(--accent); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(232,80,42,0.25); }
   .submit-btn:active { transform: translateY(0); }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-  /* Success state */
-  .success-screen {
-    display: none;
-    text-align: center;
-    padding: 4rem 2rem;
-    animation: fadeUp 0.6s ease both;
-  }
+  .success-screen { display: none; text-align: center; padding: 4rem 2rem; animation: fadeUp 0.6s ease both; }
   .success-screen.show { display: block; }
-  .success-icon {
-    font-size: 3rem;
-    margin-bottom: 1.5rem;
-  }
-  .success-screen h2 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 2rem;
-    margin-bottom: 0.75rem;
-  }
+  .success-icon { font-size: 3rem; margin-bottom: 1.5rem; }
+  .success-screen h2 { font-family: 'DM Serif Display', serif; font-size: 2rem; margin-bottom: 0.75rem; }
   .success-screen p { font-size: 0.75rem; color: var(--muted); }
 
-  /* Milestone toast */
   .toast {
     position: fixed;
     bottom: 2rem;
@@ -343,7 +256,7 @@
 </head>
 <body>
 <canvas id="confetti-canvas"></canvas>
-<div class="toast" id="toast">🎉 Milestone unlocked!</div>
+<div class="toast" id="toast"></div>
 
 <div class="container">
   <div class="header">
@@ -430,8 +343,6 @@
           <div class="platform-name">LinkedIn</div>
         </div>
       </div>
-
-      <!-- Dynamic channel fields -->
       <div id="channel-fields"></div>
     </div>
 
@@ -462,7 +373,7 @@
         <div class="field sub-field">
           <label for="followers">Total Followers / Subscribers</label>
           <input type="number" id="followers" placeholder="e.g. 50000" min="0" oninput="handleFollowers(this)">
-          <span class="sub-badge" id="sub-badge">🎉</span>
+          <span class="sub-badge" id="sub-badge"></span>
         </div>
         <div class="field">
           <label for="avg_views">Avg. Views / Reach per Post</label>
@@ -529,17 +440,19 @@
 </div>
 
 <script>
+// ─── CONFIGURATION ─────────────────────────────────────────────
+// REPLACE THIS URL with your Google Apps Script Web App URL
+// Steps: Extensions → Apps Script → Deploy → New Deployment → Web App
+// Execute as: Me | Who has access: Anyone → Deploy → Copy URL
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwXTYt7Dda36gJmNwdbBcxNICN_tDBc6KT7ptF-v8Cyt5Mdrz69c5ph1RgGK0LBbqbx/exec';
+
 // ─── Platform toggle ───────────────────────────────────────────
 const selectedPlatforms = new Set();
 
 function togglePlatform(card) {
   const p = card.dataset.platform;
   card.classList.toggle('selected');
-  if (selectedPlatforms.has(p)) {
-    selectedPlatforms.delete(p);
-  } else {
-    selectedPlatforms.add(p);
-  }
+  selectedPlatforms.has(p) ? selectedPlatforms.delete(p) : selectedPlatforms.add(p);
   renderChannelFields();
   updateProgress();
 }
@@ -557,7 +470,6 @@ function renderChannelFields() {
   const wrap = document.getElementById('channel-fields');
   wrap.innerHTML = '';
   if (!selectedPlatforms.size) return;
-
   selectedPlatforms.forEach(p => {
     const row = document.createElement('div');
     row.className = 'field-row';
@@ -569,9 +481,10 @@ function renderChannelFields() {
       <div class="field">
         <label>${PLATFORM_LABELS[p]} — Link</label>
         <input type="url" placeholder="https://" data-platform="${p}-link">
-      </div>
-    `;
+      </div>`;
     wrap.appendChild(row);
+    // attach listeners to new inputs
+    row.querySelectorAll('input').forEach(el => el.addEventListener('input', updateProgress));
   });
 }
 
@@ -588,27 +501,22 @@ let lastMilestone = 0;
 function handleFollowers(input) {
   const val = parseInt(input.value, 10) || 0;
   const badge = document.getElementById('sub-badge');
+  if (val >= 1000000)      { badge.textContent = '💎 1M+';   badge.classList.add('show'); }
+  else if (val >= 100000)  { badge.textContent = '🔥 100K+'; badge.classList.add('show'); }
+  else if (val >= 10000)   { badge.textContent = '⭐ 10K+';  badge.classList.add('show'); }
+  else if (val >= 1000)    { badge.textContent = '✨ 1K+';   badge.classList.add('show'); }
+  else                     { badge.classList.remove('show'); }
 
-  // Show badge tier
-  if (val >= 1000000) { badge.textContent = '💎 1M+'; badge.classList.add('show'); }
-  else if (val >= 100000) { badge.textContent = '🔥 100K+'; badge.classList.add('show'); }
-  else if (val >= 10000) { badge.textContent = '⭐ 10K+'; badge.classList.add('show'); }
-  else if (val >= 1000) { badge.textContent = '✨ 1K+'; badge.classList.add('show'); }
-  else { badge.classList.remove('show'); }
-
-  // Fire confetti on milestone cross
   const crossed = milestones.filter(m => val >= m);
   if (crossed.length) {
     const highest = crossed[crossed.length - 1];
     if (highest !== lastMilestone) {
       lastMilestone = highest;
-      const label = highest >= 1000000 ? `${highest/1000000}M` : highest >= 1000 ? `${highest/1000}K` : highest;
+      const label = highest >= 1000000 ? `${highest/1000000}M` : `${highest/1000}K`;
       showToast(`🎉 ${label} subscribers milestone!`);
       launchConfetti();
     }
-  } else {
-    lastMilestone = 0;
-  }
+  } else { lastMilestone = 0; }
 
   updateProgress();
 }
@@ -616,8 +524,7 @@ function handleFollowers(input) {
 // ─── Confetti ──────────────────────────────────────────────────
 const canvas = document.getElementById('confetti-canvas');
 const ctx = canvas.getContext('2d');
-let particles = [];
-let animId = null;
+let particles = [], animId = null;
 
 function launchConfetti() {
   canvas.width = window.innerWidth;
@@ -628,14 +535,12 @@ function launchConfetti() {
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height * 0.4 - 20,
       r: Math.random() * 6 + 3,
-      d: Math.random() * 160 + 60,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      tilt: Math.random() * 10 - 10,
       tiltAngle: 0,
       tiltSpeed: Math.random() * 0.1 + 0.04,
       vy: Math.random() * 3 + 2,
       vx: Math.random() * 2 - 1,
       opacity: 1,
+      color: colors[Math.floor(Math.random() * colors.length)],
       shape: Math.random() > 0.5 ? 'circle' : 'rect'
     });
   }
@@ -655,11 +560,8 @@ function drawConfetti() {
     ctx.globalAlpha = p.opacity;
     ctx.fillStyle = p.color;
     ctx.beginPath();
-    if (p.shape === 'circle') {
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    } else {
-      ctx.rect(p.x, p.y, p.r * 1.5, p.r * 0.8);
-    }
+    if (p.shape === 'circle') { ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); }
+    else { ctx.rect(p.x, p.y, p.r * 1.5, p.r * 0.8); }
     ctx.fill();
   });
   ctx.globalAlpha = 1;
@@ -667,7 +569,7 @@ function drawConfetti() {
   else { particles = []; ctx.clearRect(0, 0, canvas.width, canvas.height); }
 }
 
-// ─── Toast ────────────────────────────────────────────────────
+// ─── Toast ─────────────────────────────────────────────────────
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -675,7 +577,7 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-// ─── Progress tracking ────────────────────────────────────────
+// ─── Progress tracking ─────────────────────────────────────────
 const fields1 = ['fname','lname','email','phone','location'];
 const fields3 = ['channels_count','freq','followers'];
 const fields4 = ['own_content','edit_tool'];
@@ -692,10 +594,8 @@ function updateProgress() {
   let done = 0;
   [1,2,3,4].forEach(i => {
     const d = sectionDone(i);
-    const sec = document.getElementById(`sec${i}`);
-    const chk = document.getElementById(`chk${i}`);
-    sec.classList.toggle('done', d);
-    sec.classList.toggle('active', !d);
+    document.getElementById(`sec${i}`).classList.toggle('done', d);
+    document.getElementById(`sec${i}`).classList.toggle('active', !d);
     if (d) done++;
   });
   const pct = Math.round(done / 4 * 100);
@@ -703,47 +603,41 @@ function updateProgress() {
   document.getElementById('progress-pct').textContent = pct + '%';
 }
 
-// Attach live validation
 document.querySelectorAll('input, select, textarea').forEach(el => {
   el.addEventListener('input', updateProgress);
   el.addEventListener('change', updateProgress);
 });
 
-// ─── Submit → Google Sheets ───────────────────────────────────
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwXTYt7Dda36gJmNwdbBcxNICN_tDBc6KT7ptF-v8Cyt5Mdrz69c5ph1RgGK0LBbqbx/exec';
-
+// ─── Submit → Google Sheets ────────────────────────────────────
 document.getElementById('onboard-form').addEventListener('submit', async e => {
   e.preventDefault();
 
-  // Collect channel handles & links
   const channelDetails = [];
   document.querySelectorAll('[data-platform]').forEach(el => {
     if (el.value.trim()) channelDetails.push(`${el.dataset.platform}: ${el.value.trim()}`);
   });
 
-  // Collect selected content types
   const contentTypes = [...document.querySelectorAll('.tag-pill.on')]
     .map(p => p.textContent).join(', ');
 
   const payload = {
-    firstName:     document.getElementById('fname').value.trim(),
-    lastName:      document.getElementById('lname').value.trim(),
-    email:         document.getElementById('email').value.trim(),
-    phone:         document.getElementById('phone').value.trim(),
-    location:      document.getElementById('location').value.trim(),
-    platforms:     [...selectedPlatforms].join(', '),
+    firstName:      document.getElementById('fname').value.trim(),
+    lastName:       document.getElementById('lname').value.trim(),
+    email:          document.getElementById('email').value.trim(),
+    phone:          document.getElementById('phone').value.trim(),
+    location:       document.getElementById('location').value.trim(),
+    platforms:      [...selectedPlatforms].join(', '),
     channelDetails: channelDetails.join(' | '),
-    channelCount:  document.getElementById('channels_count').value.trim(),
-    frequency:     document.getElementById('freq').value.trim(),
-    followers:     document.getElementById('followers').value.trim(),
-    avgViews:      document.getElementById('avg_views').value.trim(),
+    channelCount:   document.getElementById('channels_count').value.trim(),
+    frequency:      document.getElementById('freq').value.trim(),
+    followers:      document.getElementById('followers').value.trim(),
+    avgViews:       document.getElementById('avg_views').value.trim(),
     contentTypes,
-    ownContent:    document.getElementById('own_content').value.trim(),
-    editingTool:   document.getElementById('edit_tool').value.trim(),
-    sampleLinks:   document.getElementById('sample_links').value.trim(),
+    ownContent:     document.getElementById('own_content').value.trim(),
+    editingTool:    document.getElementById('edit_tool').value.trim(),
+    sampleLinks:    document.getElementById('sample_links').value.trim(),
   };
 
-  // Disable button while sending
   const btn = document.querySelector('.submit-btn');
   btn.textContent = 'Submitting…';
   btn.disabled = true;
@@ -759,14 +653,12 @@ document.getElementById('onboard-form').addEventListener('submit', async e => {
     console.warn('Submission error:', err);
   }
 
-  // Show success regardless (no-cors means we can't read the response)
   document.getElementById('onboard-form').style.display = 'none';
   document.getElementById('success').classList.add('show');
   launchConfetti();
   showToast('✅ Onboarding complete!');
 });
 
-// init
 updateProgress();
 </script>
 </body>
